@@ -1,0 +1,167 @@
+.movie-card {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background: rgba(12, 19, 26, 0.94);
+  animation: reveal 500ms ease both;
+}
+
+.movie-card-featured {
+  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1fr);
+  min-height: 31rem;
+}
+
+.movie-poster-wrap {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.4)),
+    linear-gradient(135deg, rgba(255, 124, 69, 0.3), rgba(92, 225, 197, 0.16));
+}
+
+.movie-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder-poster {
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+  text-align: center;
+  color: #faf2e3;
+}
+
+.confidence-pill {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(6, 11, 15, 0.78);
+  color: #fff4e6;
+  font-size: 0.82rem;
+}
+
+.movie-body {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.1rem;
+}
+
+.movie-card-featured .movie-body {
+  padding: 1.4rem;
+  align-content: center;
+}
+
+.movie-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.movie-index {
+  margin: 0 0 0.35rem;
+  color: var(--accent);
+  font-size: 0.76rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.movie-head h3 {
+  margin: 0;
+  font-size: 1.55rem;
+  line-height: 1.05;
+  color: #fff7ef;
+}
+
+.movie-card-featured .movie-head h3 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+.movie-meta,
+.movie-overview {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.movie-meta {
+  margin-top: 0.35rem;
+  color: var(--text-muted);
+}
+
+.movie-overview {
+  font-size: 0.98rem;
+}
+
+.favorite-toggle,
+.explain-button {
+  padding: 0.7rem 0.9rem;
+  border-radius: 999px;
+}
+
+.favorite-toggle {
+  background: rgba(34, 79, 74, 0.08);
+  color: var(--accent-strong);
+}
+
+.favorite-toggle.is-active {
+  background: rgba(177, 77, 45, 0.12);
+  color: var(--accent);
+}
+
+.movie-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.explain-button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff7ef;
+}
+
+.explanation-panel {
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-soft);
+}
+
+.explanation-panel p {
+  margin: 0;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .movie-card {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-card-featured {
+    min-height: auto;
+  }
+
+  .movie-poster-wrap {
+    aspect-ratio: 5 / 3;
+  }
+
+  .movie-head {
+    flex-direction: column;
+  }
+}
