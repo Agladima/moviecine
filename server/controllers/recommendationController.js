@@ -34,6 +34,12 @@ const getRecommendations = async (req, res, next) => {
 
     const rankedMovies = rankMovies(allMovies, moodAnalysis, genreIds, 10);
 
+    if (rankedMovies.length === 0) {
+      return res.status(404).json({
+        error: 'No matching movies from 1990 onward were found for this mood. Try a broader description.',
+      });
+    }
+
     if (sessionId) {
       MoodHistory.findOneAndUpdate(
         { sessionId, rawInput: { $exists: true } },

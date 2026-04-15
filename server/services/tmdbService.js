@@ -3,6 +3,8 @@ const axios = require('axios');
 const TMDB_BASE = process.env.TMDB_BASE_URL;
 const TMDB_KEY = process.env.TMDB_API_KEY;
 const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
+const MIN_RELEASE_DATE = '1990-01-01';
+const MIN_RELEASE_YEAR = 1990;
 
 const tmdbClient = axios.create({
   baseURL: TMDB_BASE,
@@ -21,11 +23,14 @@ const fetchMoviesByGenres = async (genreIds, sortBy = 'popularity.desc', page = 
       sort_by: sortBy,
       'vote_count.gte': 100,
       'vote_average.gte': 6.0,
+      'primary_release_date.gte': MIN_RELEASE_DATE,
       page,
     },
   });
 
-  return response.data.results.map(normalizeMovie);
+  return response.data.results
+    .map(normalizeMovie)
+    .filter(isModernMovie);
 };
 
 /**
@@ -33,13 +38,17 @@ const fetchMoviesByGenres = async (genreIds, sortBy = 'popularity.desc', page = 
  */
 const searchMoviesByKeyword = async (keyword) => {
   const response = await tmdbClient.get('/search/movie', {
-    params: { query: keyword, page: 1 },
+    params: {
+      query: keyword,
+      page: 1,
+    },
   });
 
   return response.data.results
     .filter((m) => m.vote_count > 50 && m.poster_path)
-    .slice(0, 5)
-    .map(normalizeMovie);
+    .map(normalizeMovie)
+    .filter(isModernMovie)
+    .slice(0, 5);
 };
 
 /**
@@ -79,5 +88,7 @@ const normalizeMovie = (movie) => ({
   popularity: movie.popularity,
   genreIds: movie.genre_ids || [],
 });
+
+const isModernMovie = (movie) => movie.releaseYear === null || movie.releaseYear >= MIN_RELEASE_YEAR;
 
 module.exports = { fetchMoviesByGenres, searchMoviesByKeyword, getMovieDetails };
