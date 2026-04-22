@@ -29,7 +29,7 @@ function MovieCard({
         <div className="movie-head">
           <div>
             <p className="movie-index">
-              {featured ? 'Lead Selection' : `Selection ${String(index + 1).padStart(2, '0')}`}
+              {featured ? 'Top pick' : `Pick ${String(index + 1).padStart(2, '0')}`}
             </p>
             <h3>{movie.title}</h3>
             <p className="movie-meta">
@@ -49,14 +49,14 @@ function MovieCard({
 
         <div className="movie-actions">
           <button type="button" className="explain-button" onClick={() => onExplain(movie)}>
-            {isExplanationOpen ? 'Close notes' : 'Read curator note'}
+            {isExplanationOpen ? 'Hide details' : 'Why this one?'}
           </button>
         </div>
 
         {isExplanationOpen ? (
           <div className="explanation-panel">
             {explanationState === 'loading' ? (
-              <p>Generating a tailored explanation...</p>
+              <p>Loading details...</p>
             ) : (
               <p>{explanation || 'No explanation available yet.'}</p>
             )}

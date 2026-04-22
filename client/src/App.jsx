@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import MoodInput from './components/MoodInput.jsx';
 import MoodSummary from './components/MoodSummary.jsx';
 import LoadingState from './components/LoadingState.jsx';
@@ -32,6 +32,7 @@ function App() {
   const [activeExplanationId, setActiveExplanationId] = useState(null);
   const [explanations, setExplanations] = useState({});
   const [explanationState, setExplanationState] = useState({});
+  const resultsRef = useRef(null);
 
   useEffect(() => {
     const loadFavorites = async () => {
@@ -43,13 +44,19 @@ function App() {
         setFavoritesError('');
       } catch (loadError) {
         setFavoritesError(
-          loadError.response?.data?.error || 'Favorites will appear here once the backend is running.'
+          loadError.response?.data?.error || 'Saved movies will appear here once available.'
         );
       }
     };
 
     loadFavorites();
   }, []);
+
+  useEffect(() => {
+    if ((movies.length > 0 || error) && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [movies, error]);
 
   const handleToggleFavorite = async (movie) => {
     const isFavorite = favoriteIds.has(movie.tmdbId);
@@ -69,10 +76,11 @@ function App() {
         setFavorites(nextFavorites);
         setFavoriteIds(new Set(nextFavorites.map((item) => item.tmdbId)));
       }
+
       setFavoritesError('');
     } catch (saveError) {
       setFavoritesError(
-        saveError.response?.data?.error || 'Unable to update favorites right now.'
+        saveError.response?.data?.error || 'Unable to update saved movies right now.'
       );
     }
   };
@@ -106,7 +114,7 @@ function App() {
       setExplanations((current) => ({
         ...current,
         [movie.tmdbId]:
-          requestError.response?.data?.error || 'Explanation unavailable until the backend is fully configured.',
+          requestError.response?.data?.error || 'Details are unavailable right now.',
       }));
       setExplanationState((current) => ({ ...current, [movie.tmdbId]: 'error' }));
     }
@@ -114,37 +122,17 @@ function App() {
 
   return (
     <div className="app-shell">
-      <div className="scanlines" aria-hidden="true" />
-      <div className="glow glow-one" aria-hidden="true" />
-      <div className="glow glow-two" aria-hidden="true" />
+      <div className="soft-glow soft-glow-one" aria-hidden="true" />
+      <div className="soft-glow soft-glow-two" aria-hidden="true" />
 
       <main className="app-layout">
-        <header className="masthead">
-          <div>
-            <p className="eyebrow">MoodCine Transmission Deck</p>
-            <h1>Build a movie night from the signal, not the scroll.</h1>
-          </div>
-          <div className="masthead-metrics">
-            <div className="metric-tile">
-              <span>Engine</span>
-              <strong>Local mood inference</strong>
-            </div>
-            <div className="metric-tile">
-              <span>Best input</span>
-              <strong>Contradictions, wants, avoids</strong>
-            </div>
-          </div>
-        </header>
-
-        <section className="briefing-panel">
-          <div className="briefing-copy">
-            <p className="panel-label">Briefing Room</p>
-            <h2>Tell the system what the night feels like.</h2>
-            <p>
-              This version is built like a cinematic control desk: you drop the mood brief, we
-              surface a read, then the board promotes a lead title with backup selections below it.
-            </p>
-          </div>
+        <header className="hero-panel">
+          <p className="eyebrow">MoodCine</p>
+          <h1>Find the right movie for tonight.</h1>
+          <p className="hero-copy">
+            Keep it simple. Describe your mood, submit once, and we&apos;ll return a cleaner set of
+            newer recommendations.
+          </p>
 
           <MoodInput
             onSubmit={analyze}
@@ -152,14 +140,9 @@ function App() {
             disabled={isLoading}
             stage={stage}
           />
-        </section>
+        </header>
 
-        <aside className="monitor-panel">
-          <div className="monitor-header">
-            <p className="panel-label">Live Monitor</p>
-            <span className={`monitor-dot ${isLoading ? 'is-live' : ''}`} />
-          </div>
-
+        <section ref={resultsRef} className="results-panel">
           {isLoading ? (
             <LoadingState stage={stage} message={loadingMessage} />
           ) : null}
@@ -174,36 +157,21 @@ function App() {
 
           {!isLoading && error ? (
             <div className="status-card error-card">
-              <p className="status-title">Transmission interrupted</p>
+              <p className="status-title">Something went wrong</p>
               <p>{error}</p>
             </div>
           ) : null}
 
           {!isLoading && !moodProfile && !error ? (
             <div className="status-card empty-card">
-              <p className="status-title">Awaiting your mood brief</p>
-              <p>
-                Once you submit a feeling, this monitor will show the emotional read and how the
-                board is interpreting it.
-              </p>
+              <p className="status-title">Start with your mood</p>
+              <p>Type how you feel above and your recommendations will appear here.</p>
             </div>
           ) : null}
-        </aside>
-
-        <section className="board-panel">
-          <div className="board-heading">
-            <div>
-              <p className="panel-label">Selection Board</p>
-              <h2>Tonight&apos;s lineup</h2>
-            </div>
-            <p className="board-copy">
-              The board promotes one featured pick first, then keeps the rest in the deck.
-            </p>
-          </div>
 
           {!isLoading && movies.length > 0 ? (
-            <>
-              <div className="featured-stage">
+            <section className="results-stack" aria-label="Movie recommendations">
+              <div className="featured-slot">
                 <MovieCard
                   movie={movies[0]}
                   index={0}
@@ -218,7 +186,7 @@ function App() {
               </div>
 
               {movies.length > 1 ? (
-                <section className="results-grid" aria-label="Movie recommendations">
+                <div className="results-grid">
                   {movies.slice(1).map((movie, index) => (
                     <MovieCard
                       key={movie.tmdbId}
@@ -232,19 +200,21 @@ function App() {
                       onExplain={handleExplanation}
                     />
                   ))}
-                </section>
+                </div>
               ) : null}
-            </>
+            </section>
           ) : null}
         </section>
 
-        <section className="archive-panel">
-          <FavoritesList
-            favorites={favorites}
-            error={favoritesError}
-            onRemove={handleToggleFavorite}
-          />
-        </section>
+        {(favorites.length > 0 || favoritesError) ? (
+          <section className="saved-panel">
+            <FavoritesList
+              favorites={favorites}
+              error={favoritesError}
+              onRemove={handleToggleFavorite}
+            />
+          </section>
+        ) : null}
       </main>
     </div>
   );

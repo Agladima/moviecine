@@ -40,6 +40,18 @@ const scoreMovie = (movie, moodAnalysis, targetGenreIds) => {
     : 2;
   score += voteScore;
 
+  const releaseYear = movie.releaseYear || 2000;
+  const recencyScore = releaseYear >= 2020
+    ? 10
+    : releaseYear >= 2015
+    ? 8
+    : releaseYear >= 2010
+    ? 6
+    : releaseYear >= 2005
+    ? 4
+    : 2;
+  score += recencyScore;
+
   if (moodAnalysis.intensity === 'high' && movie.rating >= 8.0) {
     score += 5;
   }

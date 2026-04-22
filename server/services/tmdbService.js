@@ -3,8 +3,8 @@ const axios = require('axios');
 const TMDB_BASE = process.env.TMDB_BASE_URL;
 const TMDB_KEY = process.env.TMDB_API_KEY;
 const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
-const MIN_RELEASE_DATE = '1990-01-01';
-const MIN_RELEASE_YEAR = 1990;
+const MIN_RELEASE_DATE = '2000-01-01';
+const MIN_RELEASE_YEAR = 2000;
 
 const tmdbClient = axios.create({
   baseURL: TMDB_BASE,
@@ -24,6 +24,7 @@ const fetchMoviesByGenres = async (genreIds, sortBy = 'popularity.desc', page = 
       'vote_count.gte': 100,
       'vote_average.gte': 6.0,
       'primary_release_date.gte': MIN_RELEASE_DATE,
+      include_adult: false,
       page,
     },
   });

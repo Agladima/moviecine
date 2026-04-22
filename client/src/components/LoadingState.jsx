@@ -1,13 +1,9 @@
 function LoadingState({ stage, message }) {
   return (
     <section className="status-card loading-card">
-      <div className="pulse-orb" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-      </div>
+      <div className="pulse-orb" aria-hidden="true" />
       <p className="status-title">
-        {stage === 'analyzing' ? 'Analyzing your mood' : 'Building recommendations'}
+        {stage === 'analyzing' ? 'Reading your mood' : 'Finding your movies'}
       </p>
       <p>{message}</p>
     </section>

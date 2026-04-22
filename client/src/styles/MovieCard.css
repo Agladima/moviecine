@@ -1,25 +1,25 @@
 .movie-card {
   display: grid;
-  grid-template-columns: 140px minmax(0, 1fr);
-  overflow: hidden;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 1rem;
   border: 1px solid var(--line);
-  border-radius: 1.5rem;
-  background: rgba(12, 19, 26, 0.94);
-  animation: reveal 500ms ease both;
+  background: var(--bg-panel-strong);
+  border-radius: 1.25rem;
+  padding: 1rem;
+  animation: fadeUp 420ms ease both;
 }
 
 .movie-card-featured {
-  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1fr);
-  min-height: 31rem;
+  grid-template-columns: minmax(180px, 220px) minmax(0, 1fr);
+  padding: 1.1rem;
 }
 
 .movie-poster-wrap {
   position: relative;
-  min-height: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 1rem;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.4)),
-    linear-gradient(135deg, rgba(255, 124, 69, 0.3), rgba(92, 225, 197, 0.16));
+  background: linear-gradient(135deg, rgba(54, 89, 227, 0.18), rgba(15, 118, 110, 0.16));
 }
 
 .movie-poster {
@@ -31,116 +31,104 @@
 .placeholder-poster {
   display: grid;
   place-items: center;
-  padding: 1.2rem;
   text-align: center;
-  color: #faf2e3;
+  padding: 1rem;
+  color: white;
 }
 
 .confidence-pill {
   position: absolute;
-  top: 0.9rem;
-  left: 0.9rem;
-  padding: 0.45rem 0.7rem;
+  top: 0.7rem;
+  left: 0.7rem;
+  padding: 0.35rem 0.6rem;
   border-radius: 999px;
-  background: rgba(6, 11, 15, 0.78);
-  color: #fff4e6;
-  font-size: 0.82rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 .movie-body {
   display: grid;
   gap: 0.8rem;
-  padding: 1.1rem;
-}
-
-.movie-card-featured .movie-body {
-  padding: 1.4rem;
-  align-content: center;
+  align-content: start;
 }
 
 .movie-head {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
   gap: 0.75rem;
+  align-items: flex-start;
 }
 
 .movie-index {
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.25rem;
   color: var(--accent);
-  font-size: 0.76rem;
-  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .movie-head h3 {
   margin: 0;
-  font-size: 1.55rem;
+  color: #f8fbff;
+  font-size: 1.4rem;
   line-height: 1.05;
-  color: #fff7ef;
 }
 
 .movie-card-featured .movie-head h3 {
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
 }
 
 .movie-meta,
 .movie-overview {
   margin: 0;
-  color: var(--text-soft);
-}
-
-.movie-meta {
-  margin-top: 0.35rem;
-  color: var(--text-muted);
-}
-
-.movie-overview {
-  font-size: 0.98rem;
 }
 
 .favorite-toggle,
 .explain-button {
-  padding: 0.7rem 0.9rem;
   border-radius: 999px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.88rem;
 }
 
 .favorite-toggle {
-  background: rgba(34, 79, 74, 0.08);
-  color: var(--accent-strong);
+  background: rgba(54, 89, 227, 0.06);
+  color: var(--accent);
 }
 
 .favorite-toggle.is-active {
-  background: rgba(177, 77, 45, 0.12);
-  color: var(--accent);
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--accent-strong);
 }
 
 .movie-actions {
   display: flex;
-  justify-content: flex-start;
 }
 
 .explain-button {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #fff7ef;
+  border: 1px solid var(--line);
+  color: #eaf3ff;
 }
 
 .explanation-panel {
-  padding: 0.9rem 1rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text-soft);
+  border: 1px solid var(--line);
+  border-radius: 0.95rem;
+  background: rgba(54, 89, 227, 0.03);
+  padding: 0.85rem 0.95rem;
 }
 
 .explanation-panel p {
   margin: 0;
+  color: var(--text-soft);
 }
 
-@keyframes reveal {
+@keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -149,16 +137,13 @@
 }
 
 @media (max-width: 640px) {
-  .movie-card {
+  .movie-card,
+  .movie-card-featured {
     grid-template-columns: 1fr;
   }
 
-  .movie-card-featured {
-    min-height: auto;
-  }
-
   .movie-poster-wrap {
-    aspect-ratio: 5 / 3;
+    aspect-ratio: 16 / 9;
   }
 
   .movie-head {

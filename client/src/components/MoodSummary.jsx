@@ -3,36 +3,38 @@ function MoodSummary({ moodProfile, movieCount, onReset }) {
     <section className="summary-card">
       <div className="summary-head">
         <div>
-          <p className="summary-kicker">Mood Read</p>
+          <p className="summary-kicker">Mood read</p>
           <h2>{moodProfile.humanSummary}</h2>
         </div>
         <div className="summary-actions">
           {moodProfile.confidence ? (
-            <span className="confidence-badge">{moodProfile.confidence}% confidence</span>
+            <span className="confidence-badge">{moodProfile.confidence}% sure</span>
           ) : null}
           <button type="button" className="summary-reset" onClick={onReset}>
-            New mood
+            Retry
           </button>
         </div>
       </div>
 
       <div className="summary-grid">
         <div className="summary-item">
-          <span>Primary emotion</span>
+          <span>Emotion</span>
           <strong>{moodProfile.primaryEmotion}</strong>
-        </div>
-        <div className="summary-item">
-          <span>Secondary emotion</span>
-          <strong>{moodProfile.secondaryEmotion || 'None detected'}</strong>
         </div>
         <div className="summary-item">
           <span>Intensity</span>
           <strong>{moodProfile.intensity}</strong>
         </div>
         <div className="summary-item">
-          <span>Matches found</span>
+          <span>Results</span>
           <strong>{movieCount}</strong>
         </div>
+        {moodProfile.secondaryEmotion ? (
+          <div className="summary-item">
+            <span>Secondary</span>
+            <strong>{moodProfile.secondaryEmotion}</strong>
+          </div>
+        ) : null}
       </div>
 
       <p className="summary-context">{moodProfile.context}</p>
@@ -45,7 +47,7 @@ function MoodSummary({ moodProfile, movieCount, onReset }) {
         ))}
         {moodProfile.avoidTones?.map((tone) => (
           <span key={tone} className="tag avoid-tag">
-            avoid {tone}
+            no {tone}
           </span>
         ))}
       </div>
