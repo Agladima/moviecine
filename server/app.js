@@ -17,6 +17,11 @@ const allowedOrigins = [
     ? process.env.CLIENT_URL.split(',').map((origin) => origin.trim()).filter(Boolean)
     : []),
 ];
+const allowedOriginPatterns = [/^https:\/\/.*\.vercel\.app$/];
+
+const isAllowedOrigin = (origin) =>
+  allowedOrigins.includes(origin) ||
+  allowedOriginPatterns.some((pattern) => pattern.test(origin));
 
 // Connect to MongoDB
 connectDB();
@@ -25,7 +30,7 @@ connectDB();
 app.use(helmet());
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || isAllowedOrigin(origin)) {
       return callback(null, true);
     }
 

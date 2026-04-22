@@ -1,7 +1,18 @@
 import axios from 'axios';
 
+const normalizeApiBaseUrl = (value) => {
+  const fallback = 'http://localhost:5000/api';
+
+  if (!value) {
+    return fallback;
+  }
+
+  const trimmed = value.trim().replace(/\/+$/, '');
+  return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: normalizeApiBaseUrl(import.meta.env.VITE_API_URL),
   timeout: 30000,
 });
 
