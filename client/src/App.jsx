@@ -128,7 +128,7 @@ function App() {
       <main className="app-layout">
         <header className="hero-panel">
           <p className="eyebrow">MoodCine</p>
-          <h1>Find the right movie for tonight.</h1>
+          <h1>Find the right movie for your mood.</h1>
           <p className="hero-copy">
             Keep it simple. Describe your mood, submit once, and we&apos;ll return a cleaner set of
             newer recommendations.
