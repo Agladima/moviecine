@@ -71,6 +71,7 @@
   font-size: clamp(1.85rem, 3.1vw, 3rem);
   line-height: 1;
   letter-spacing: -0.04em;
+  text-wrap: balance;
 }
 
 .hero-copy {
@@ -310,6 +311,12 @@
 }
 
 @media (max-width: 560px) {
+  .hero-panel h1 {
+    max-width: 18ch;
+    font-size: clamp(1.5rem, 6.6vw, 1.95rem);
+    line-height: 1.05;
+  }
+
   .summary-head,
   .favorites-head {
     flex-direction: column;
